@@ -1,0 +1,7 @@
+@"
+node_modules/
+dist/
+.angular/
+.vscode/
+.env
+"@ | Out-File -FilePath .gitignore -Encoding utf8
