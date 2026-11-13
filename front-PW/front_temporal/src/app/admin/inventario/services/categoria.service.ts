@@ -18,5 +18,13 @@ export class CategoriaService {
     return this.http.post(`${this.baseUrl}/categoria`, registro);
   }
 
+  funModificar(id: number, registro: any){
+    return this.http.put(`${this.baseUrl}/categoria/${id}`, registro);
+  }
+
+  funEliminar(id: number){
+    return this.http.delete(`${this.baseUrl}/categoria/${id}`);
+  }
+
   constructor() { }
 }

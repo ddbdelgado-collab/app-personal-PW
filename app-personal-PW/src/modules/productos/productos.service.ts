@@ -9,7 +9,7 @@ export class ProductosService {
     
     constructor(
         @InjectRepository(Productos)
-        private readonly productosRepository: Repository<Productos>
+        private productosRepository: Repository<Productos>
     ){}
 
     async findAll(): Promise<any[]> {
