@@ -3,6 +3,7 @@ import { Categorias } from './entities/categoria.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateCategoriaDto } from './dto/update-categoria.dto';
+import { CreateCategoriaDto } from './dto/create-categoria.dto';
 
 @Injectable()
 export class CategoriasService {
@@ -16,7 +17,7 @@ export class CategoriasService {
         return await this.categoriasRepository.find();
     }
 
-    async create(categoriaDto: any){
+    async create(categoriaDto: CreateCategoriaDto){
         const categoria = new Categorias();
         categoria.nombre = categoriaDto.nombre;
         categoria.descripcion = categoriaDto.descripcion;

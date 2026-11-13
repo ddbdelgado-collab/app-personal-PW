@@ -7,8 +7,8 @@ import { UpdateCategoriaDto } from './dto/update-categoria.dto';
 
 @ApiTags('CRUD Categorias')
 @ApiBearerAuth()
-@UseGuards(JwtAuthGuard)
-@Controller('categorias')
+//@UseGuards(JwtAuthGuard)
+@Controller('categoria')
 export class CategoriasController {
 
     constructor(private categoriasService: CategoriasService){}
