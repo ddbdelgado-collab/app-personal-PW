@@ -1,12 +1,15 @@
-import { IsEmail, IsNotEmpty, MaxLength, MinLength } from "class-validator";
+import { IsNotEmpty, MaxLength, MinLength, IsString } from "class-validator";
 import { Usuario } from "../../usuarios/interfaces/usuarios.interface";
 
-
-export class LoginAuthDto implements Pick<Usuario, 'email' | 'password_hash'> {
+// Asegúrate de que tu interfaz 'Usuario' tenga la propiedad 'cedula'
+export class LoginAuthDto implements Pick<Usuario, 'cedula' | 'password_hash'> {
     
     @IsNotEmpty()
-    @IsEmail()
-    email!: string;
+    @IsString()
+    @MinLength(10)
+    @MaxLength(10)
+    cedula!: string;
+
     @MinLength(6)
     @MaxLength(20)
     @IsNotEmpty()

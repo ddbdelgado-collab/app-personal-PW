@@ -14,7 +14,7 @@ export class UsuariosService {
 
     async create(usua: any){
         const usuarios = new Usuarios()
-        usuarios.email = usua.email;
+        usuarios.cedula = usua.email;
         usuarios.password_hash = usua.password;
         usuarios.nombre = usua.nombre;
         usuarios.apellido = usua.apellido;

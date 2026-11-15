@@ -1,6 +1,6 @@
 export interface Usuario {
     readonly id_usuario: number;
-    readonly email: string;
+    readonly cedula: string;
     readonly password_hash: string;
     readonly nombre: string;
     readonly apellido: string;

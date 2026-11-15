@@ -5,8 +5,8 @@ export class Usuarios{
     @PrimaryGeneratedColumn()
     id_usuario!: number
 
-    @Column()
-    email!: string
+    @Column({ name: 'email', type: 'varchar' })
+    cedula!: string
 
     @Column()
     password_hash!: string
@@ -37,4 +37,10 @@ export class Usuarios{
         default: true 
     })
     activo!: boolean
+
+    @Column({ type: 'int', default: 0 })
+    intentos_fallidos!: number;
+
+    @Column({ type: 'timestamp', nullable: true })
+    bloqueado_hasta!: Date | null;
 }
