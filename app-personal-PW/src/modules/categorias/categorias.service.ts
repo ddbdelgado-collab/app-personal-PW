@@ -17,6 +17,14 @@ export class CategoriasService {
         return await this.categoriasRepository.find();
     }
 
+    async findOne(id: number) {
+    return await this.categoriasRepository.findOne({
+        where: {
+        id_categoria: id
+        }
+    });
+    }
+
     async create(categoriaDto: CreateCategoriaDto){
         const categoria = new Categorias();
         categoria.nombre = categoriaDto.nombre;

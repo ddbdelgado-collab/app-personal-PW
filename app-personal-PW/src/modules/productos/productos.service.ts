@@ -1,47 +1,35 @@
 import { Injectable } from '@nestjs/common';
+import { CreateProductoDto } from './dto/create-producto.dto';
+import { UpdateProductoDto } from './dto/update-producto.dto';
+import { InjectRepository } from '@nestjs/typeorm';
 import { Productos } from './entities/producto.entity';
 import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
-import { UpdateProductoDto } from './dto/update-producto.dto';
 
 @Injectable()
 export class ProductosService {
-    
-    constructor(
-        @InjectRepository(Productos)
-        private productosRepository: Repository<Productos>
-    ){}
+  constructor(@InjectRepository(Productos) private productosRepository: Repository<Productos>){}
 
-    async findAll(): Promise<any[]> {
-        return await this.productosRepository.find({
-            relations: { categoria: true }
-        });
-    }
+  create(createProductoDto: CreateProductoDto) {
+    return this.productosRepository.save(createProductoDto);
+  }
 
-    async create(productoDto: any){
-        const producto = new Productos();
-        producto.nombre = productoDto.nombre;
-        producto.descripcion = productoDto.descripcion;
-        producto.precio = productoDto.precio;
-        producto.stock = productoDto.stock;
-        producto.imagen_url = productoDto.imagen_url;
-        
-        // Mapeo de la llave foránea
-        producto.categoria = { id_categoria: productoDto.id_categoria } as any;
+  findAll() {
+    return this.productosRepository.find();
+  }
 
-        return await this.productosRepository.save(producto);
-    }
+  findOne(id: number) {
+    return this.productosRepository.findOne({
+        where: {
+            id_producto: id
+        }
+    });
+  }
 
-    async update(id_producto: number, productoDto: UpdateProductoDto) {
-        await this.productosRepository.update(id_producto, productoDto);
+  update(id: number, updateProductoDto: UpdateProductoDto) {
+    return this.productosRepository.update(id, updateProductoDto);
+  }
 
-        return this.productosRepository.findOne({
-            where: { id_producto: id_producto },
-            relations: { categoria: true }
-        });
-    }
-
-    async delete(id_producto: number) {
-        return await this.productosRepository.delete(id_producto);
-    }
+  remove(id: number) {
+    return this.productosRepository.delete(id);
+  }
 }

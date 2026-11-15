@@ -45,6 +45,6 @@ export class ProductosController {
     funEliminar(
         @Param('id') id: number,
     ) {
-        return this.productosService.delete(id);
+        return this.productosService.remove(id);
     }
 }
