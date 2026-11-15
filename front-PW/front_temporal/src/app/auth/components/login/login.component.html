@@ -1,40 +1,47 @@
-<h1>Ingresar</h1>
-{{ loginForm.value | json }}
-{{ loginForm.valid }}
-<form [formGroup]="loginForm">
-    <label>Ingrese Correo: </label>
-    <input type="email" formControlName="email">
-    <br>
-    <label>Ingrese Contraseña: </label>
-    <input type="password" formControlName="password_hash">
-    <br>
-    <button (click)="funIngresar()" [disabled]="!loginForm.valid"> Ingresar </button>
-</form>
-
 <div class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
     <div class="flex flex-column align-items-center justify-content-center">
+        <!-- Logo Sakai -->
+        <img src="assets/layout/images/logo-dark.svg" alt="Sakai logo" class="mb-5 w-6rem flex-shrink-0">                
+        
         <div style="border-radius:56px; padding:0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%);">
             <div class="w-full surface-card py-8 px-5 sm:px-8" style="border-radius:53px">
                 <div class="text-center mb-5">
                     <img src="assets/demo/images/login/avatar.png" alt="Image" height="50" class="mb-3">
-                    <div class="text-900 text-3xl font-medium mb-3">Welcome, Isabel!</div>
-                    <span class="text-600 font-medium">Sign in to continue</span>
+                    <div class="text-900 text-3xl font-medium mb-3">Bienvenido</div>
+                    <span class="text-600 font-medium">Inicia sesión para continuar</span>
                 </div>
 
-                <div>
-                    <label for="email1" class="block text-900 text-xl font-medium mb-2">Email</label>
-                    <input id="email1" type="text" placeholder="Email address" pInputText class="w-full md:w-30rem mb-5" style="padding:1rem">
+                <!-- Mensajes de error dinámicos desde el backend -->
+                <div *ngIf="cuentaBloqueada || mensajeError" class="p-3 mb-5 border-round bg-red-100 text-red-700 font-medium text-center">
+                    {{ mensajeError }}
+                </div>
 
-                    <label for="password1" class="block text-900 font-medium text-xl mb-2">Password</label>
+                <!-- Inicio del Reactive Form -->
+                <form [formGroup]="loginForm" (ngSubmit)="funIngresar()">
+                    <label for="cedula" class="block text-900 text-xl font-medium mb-2">Número de Cédula</label>
+                    <input id="cedula" type="text" maxlength="10" formControlName="cedula" placeholder="Ej: 1712345678" pInputText class="w-full md:w-30rem mb-2" style="padding:1rem">
+                    
+                    <!-- Mensajes de error para la Cédula -->
+                    <small *ngIf="loginForm.get('cedula')?.hasError('cedulaInvalida') && loginForm.get('cedula')?.touched" class="p-error block mb-5">
+                        El número de cédula ingresado no es válido.
+                    </small>
+                    <div *ngIf="!loginForm.get('cedula')?.hasError('cedulaInvalida')" class="mb-5"></div>
+
+                    <label for="password1" class="block text-900 font-medium text-xl mb-2">Contraseña</label>
+                    <p-password id="password1" formControlName="password_hash" placeholder="Contraseña" [toggleMask]="true" styleClass="mb-5" inputStyleClass="w-full p-3 md:w-30rem" [feedback]="false"></p-password>
 
                     <div class="flex align-items-center justify-content-between mb-5 gap-5">
                         <div class="flex align-items-center">
-                            <label for="rememberme1">Remember me</label>
+                            <p-checkbox id="rememberme1" [binary]="true" styleClass="mr-2"></p-checkbox>
+                            <label for="rememberme1">Recordarme</label>
                         </div>
-                        <a class="font-medium no-underline ml-2 text-right cursor-pointer" style="color: var(--primary-color)">Forgot password?</a>
+                        <a class="font-medium no-underline ml-2 text-right cursor-pointer" style="color: var(--primary-color)">¿Olvidaste tu contraseña?</a>
                     </div>
-                    <button pButton pRipple label="Sign In" class="w-full p-3 text-xl" [routerLink]="['/']"></button>
-                </div>
+                    
+                    <!-- Botón de submit con bloqueo si el form es inválido o la cuenta está bloqueada -->
+                    <button pButton pRipple type="submit" label="Ingresar" class="w-full p-3 text-xl" [disabled]="!loginForm.valid || cuentaBloqueada"></button>
+                </form>
+                <!-- Fin del Reactive Form -->
             </div>
         </div>
     </div>
