@@ -1,13 +1,25 @@
-import { IsInt, IsNotEmpty, IsPositive } from 'class-validator';
+import { IsInt, IsNotEmpty, IsNumber, IsOptional, IsString, MaxLength } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateOrdenDto {
-    @IsInt()
-    @IsPositive()
-    @IsNotEmpty({ message: 'El ID del usuario es requerido' })
-    id_usuario!: number;
+  @ApiProperty()
+  @IsNumber({ maxDecimalPlaces: 2 })
+  @IsNotEmpty()
+  total!: number;
 
-    @IsInt()
-    @IsPositive()
-    @IsNotEmpty({ message: 'El ID de la dirección de envío es requerido' })
-    id_direccion!: number;
+  @ApiProperty()
+  @IsString()
+  @MaxLength(20)
+  @IsNotEmpty()
+  estado!: string;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  direccion_envio_texto?: string;
+
+  @ApiProperty()
+  @IsInt()
+  @IsNotEmpty()
+  id_usuario!: number;
 }

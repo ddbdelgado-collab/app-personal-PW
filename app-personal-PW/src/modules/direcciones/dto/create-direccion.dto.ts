@@ -1,24 +1,30 @@
-import { IsString, IsNotEmpty, IsOptional, IsInt, IsPositive } from 'class-validator';
+import { IsInt, IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateDireccionDto {
-    @IsString()
-    @IsNotEmpty({ message: 'La calle principal es requerida' })
-    calle_principal!: string;
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  calle_principal!: string;
 
-    @IsString()
-    @IsNotEmpty({ message: 'La calle secundaria es requerida' })
-    calle_secundaria!: string;
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  calle_secundaria?: string;
 
-    @IsString()
-    @IsNotEmpty({ message: 'La ciudad es requerida' })
-    ciudad!: string;
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  ciudad!: string;
 
-    @IsString()
-    @IsOptional()
-    referencia?: string;
+  @ApiProperty({ required: false })
+  @IsString()
+  @MaxLength(255)
+  @IsOptional()
+  referencia?: string;
 
-    @IsInt()
-    @IsPositive()
-    @IsNotEmpty({ message: 'El ID del usuario es requerido para asociar la dirección' })
-    id_usuario!: number;
+  @ApiProperty()
+  @IsInt()
+  @IsNotEmpty()
+  id_usuario!: number;
 }

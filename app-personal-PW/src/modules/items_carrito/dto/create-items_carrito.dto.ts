@@ -1,18 +1,20 @@
-import { IsInt, IsNotEmpty, Min, IsPositive } from 'class-validator';
+import { IsInt, IsNotEmpty, Min } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateItemCarritoDto {
-    @IsInt()
-    @Min(1, { message: 'La cantidad debe ser al menos 1' })
-    @IsNotEmpty({ message: 'La cantidad es requerida' })
-    cantidad!: number;
+  @ApiProperty()
+  @IsInt()
+  @IsNotEmpty()
+  @Min(1)
+  cantidad!: number;
 
-    @IsInt()
-    @IsPositive()
-    @IsNotEmpty({ message: 'El ID del producto es requerido' })
-    id_producto!: number;
+  @ApiProperty()
+  @IsInt()
+  @IsNotEmpty()
+  id_usuario!: number;
 
-    @IsInt()
-    @IsPositive()
-    @IsNotEmpty({ message: 'El ID del usuario es requerido' })
-    id_usuario!: number;
+  @ApiProperty()
+  @IsInt()
+  @IsNotEmpty()
+  id_producto!: number;
 }

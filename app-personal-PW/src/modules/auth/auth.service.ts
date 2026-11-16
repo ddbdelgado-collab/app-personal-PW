@@ -4,7 +4,8 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Usuarios } from '../usuarios/entities/usuario.entity';
-import * as bcrypt from 'bcrypt';
+import { hash, compare } from 'bcrypt';
+import { RegisterAuthDto } from './dto/register-auth.dto';
 
 @Injectable()
 export class AuthService {
@@ -13,6 +14,16 @@ export class AuthService {
     @InjectRepository(Usuarios)
     private usuarioRepository: Repository<Usuarios>,
   ) {}
+
+  async funRegister(objUser: RegisterAuthDto) {
+    const { password_hash } = objUser; // capturamos solo password de todo el objeto
+    const plainToHash = await hash(password_hash, 12); // para encriptar la contraseña
+    
+    objUser = { ...objUser, password_hash: plainToHash }; 
+    // almacena todos los datos excepto el password que fue sacado y guarda un nuevo password
+
+    return this.usuarioRepository.save(objUser); // para guardar en la BDD
+  }
 
   async login(credenciales: LoginAuthDto) {
     const { cedula, password_hash } = credenciales;
@@ -52,7 +63,7 @@ export class AuthService {
     }
 
     // 4. Comparar contraseña
-    const isPasswordValid = await bcrypt.compare(password_hash, usuarioDb.password_hash);
+    const isPasswordValid = await compare(password_hash, usuarioDb.password_hash);
 
     if (!isPasswordValid) {
       usuarioDb.intentos_fallidos += 1;

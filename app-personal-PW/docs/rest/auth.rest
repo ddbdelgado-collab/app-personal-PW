@@ -1,19 +1,27 @@
-#POST http://127.0.0.1:3000/auth/register
-#Content-Type: application/json
-
-#{
-#  "name": "John Doe"
-#}
 
 POST http://127.0.0.1:3000/auth/login
 Content-Type: application/json
 
 {
-    "name": "Derlis",
-    "email": "john.doe@example.com",
-    "password_hash": "password123"
+    "cedula": "1750241232",
+    "password_hash": "Hola_123"
 }
 
 
 
-#GET http://127.0.0.1:3000/usuarios 
+###
+POST http://127.0.0.1:3000/auth/register
+Content-Type: application/json
+
+{
+    "cedula": "1750241232",
+    "nombre": "Jose",
+    "apellido": "Gonzalez",
+    "telefono": "0987654321",
+    "password_hash": "password123"
+}
+
+###
+
+GET http://127.0.0.1:3000/usuarios 
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjZWR1bGEiOiIxNzUwMjQxMjMyIiwic3ViIjoxLCJpYXQiOjE3OTQ4MzYzNDgsImV4cCI6MTc5NDgzOTk0OH0.DcqF4bKhixWsadPY2NM7GP5vV-IHlgSOohj507p_cqw

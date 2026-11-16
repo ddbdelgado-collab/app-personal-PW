@@ -16,7 +16,8 @@ import { Usuarios } from '../usuarios/entities/usuario.entity';
     JwtModule.register({
       secret: 'MI_CODIGO_SECRETO',
       signOptions: { expiresIn: '1h' }
-    })
+    }),
+    TypeOrmModule.forFeature([Usuarios])
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy]

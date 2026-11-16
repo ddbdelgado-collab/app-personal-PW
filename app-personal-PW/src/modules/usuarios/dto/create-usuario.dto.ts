@@ -1,28 +1,40 @@
-import { IsString, IsEmail, IsNotEmpty, IsOptional, MinLength } from 'class-validator';
+import { IsBoolean, IsEmail, IsInt, IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateUsuarioDto{
-    @IsEmail({}, { message: 'El email debe ser un correo electrónico válido' })
-    @IsNotEmpty({ message: 'El email es requerido' })
-    email!: string;
+export class CreateUsuarioDto {
+  @ApiProperty()
+  @IsEmail()
+  @IsNotEmpty()
+  email!: string;
 
-    @IsString()
-    @IsNotEmpty({ message: 'La contraseña es requerida' })
-    @MinLength(6, { message: 'La contraseña debe tener al menos 6 caracteres' })
-    password!: string;
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  password_hash!: string; // En la práctica, el cliente envía 'password' y el backend lo hashea
 
-    @IsString()
-    @IsNotEmpty({ message: 'El nombre es requerido' })
-    nombre!: string;
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  nombre!: string;
 
-    @IsString()
-    @IsNotEmpty({ message: 'El apellido es requerido' })
-    apellido!: string;
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  apellido!: string;
 
-    @IsString()
-    @IsNotEmpty({ message: 'El teléfono es requerido' })
-    telefono!: string;
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  telefono?: string;
 
-    @IsString()
-    @IsOptional()
-    rol?: string;
+  @ApiProperty({ required: false })
+  @IsString()
+  @MaxLength(20)
+  @IsOptional()
+  rol?: string;
+
+  @ApiProperty({ required: false, default: true })
+  @IsBoolean()
+  @IsOptional()
+  activo?: boolean;
 }

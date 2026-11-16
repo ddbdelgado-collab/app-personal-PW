@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { DetallesOrdenesService } from './detalles_ordenes.service';
-import { CreateDetallesOrdeneDto } from './dto/create-detalles_ordene.dto';
+import { CreateDetalleOrdenDto } from './dto/create-detalles_ordene.dto';
 import { UpdateDetallesOrdeneDto } from './dto/update-detalles_ordene.dto';
 
 @Controller('detalles-ordenes')
@@ -8,8 +8,8 @@ export class DetallesOrdenesController {
   constructor(private readonly detallesOrdenesService: DetallesOrdenesService) {}
 
   @Post()
-  create(@Body() createDetallesOrdeneDto: CreateDetallesOrdeneDto) {
-    return this.detallesOrdenesService.create(createDetallesOrdeneDto);
+  create(@Body() createDetalleOrdenDto: CreateDetalleOrdenDto) {
+    return this.detallesOrdenesService.create(createDetalleOrdenDto);
   }
 
   @Get()
