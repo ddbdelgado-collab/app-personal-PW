@@ -1,0 +1,17 @@
+get http://localhost:3000/productos
+
+###
+
+POST http://localhost:3000/productos
+Content-Type: application/json
+
+{
+  "nombre": "Producto 1",
+  "descripcion": "Descripción del producto 1",
+  "precio": 10.99,
+  "stock": 100,
+  "id_categoria": 1
+}
+
+### Busqueda por nombre, paginación y orden
+GET http://localhost:3000/productos/back

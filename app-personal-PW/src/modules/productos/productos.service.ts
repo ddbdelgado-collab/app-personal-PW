@@ -9,6 +9,10 @@ import { Repository } from 'typeorm';
 export class ProductosService {
   constructor(@InjectRepository(Productos) private productosRepository: Repository<Productos>){}
 
+  queryBuilder(alias: string){
+    return this.productosRepository.createQueryBuilder(alias);
+  }
+
   create(createProductoDto: CreateProductoDto) {
     return this.productosRepository.save(createProductoDto);
   }
