@@ -1,47 +1,79 @@
-<div class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
-    <div class="flex flex-column align-items-center justify-content-center">
-        <!-- Logo Sakai -->
-        <!--<img src="assets/layout/images/logo-dark.svg" alt="Sakai logo" class="mb-5 w-6rem flex-shrink-0">-->               
-        
-        <div style="border-radius:56px; padding:0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%);">
-            <div class="w-full surface-card py-8 px-5 sm:px-8" style="border-radius:53px">
+<p-toast position="top-right"></p-toast>
+
+<div
+    class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden py-5 px-3">
+    <div class="flex flex-column align-items-center justify-content-center w-full" style="max-width: 34rem;">
+        <div class="w-full"
+            style="border-radius:56px; padding:0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%);">
+            <div class="w-full surface-card py-7 px-5 sm:px-8" style="border-radius:53px">
                 <div class="text-center mb-5">
-                    <!--<img src="assets/demo/images/login/avatar.png" alt="Image" height="50" class="mb-3">-->
-                    <div class="text-900 text-3xl font-medium mb-3">Bienvenido</div>
-                    <span class="text-600 font-medium">Inicia sesión para continuar</span>
+                    <!--<img src="assets/demo/images/login/avatar.png" alt="Avatar" height="50" class="mb-3">-->
+                    <div class="text-900 text-3xl font-medium mb-2">¡Bienvenido!</div>
+                    <span class="text-600 font-medium">Inicia sesión con tu cédula para continuar</span>
                 </div>
 
-                <!-- Mensajes de error dinámicos desde el backend -->
-                <div *ngIf="cuentaBloqueada || mensajeError" class="p-3 mb-5 border-round bg-red-100 text-red-700 font-medium text-center">
-                    {{ mensajeError }}
-                </div>
-
-                <!-- Inicio del Reactive Form -->
-                <form [formGroup]="loginForm" (ngSubmit)="funIngresar()">
-                    <label for="cedula" class="block text-900 text-xl font-medium mb-2">Número de Cédula</label>
-                    <input id="cedula" type="text" maxlength="10" formControlName="cedula" placeholder="Ej: 1712345678" pInputText class="w-full md:w-30rem mb-2" style="padding:1rem">
-                    
-                    <!-- Mensajes de error para la Cédula -->
-                    <small *ngIf="loginForm.get('cedula')?.hasError('cedulaInvalida') && loginForm.get('cedula')?.touched" class="p-error block mb-5">
-                        El número de cédula ingresado no es válido.
-                    </small>
-                    <div *ngIf="!loginForm.get('cedula')?.hasError('cedulaInvalida')" class="mb-5"></div>
-
-                    <label for="password1" class="block text-900 font-medium text-xl mb-2">Contraseña</label>
-                    <p-password id="password1" formControlName="password_hash" placeholder="Contraseña" [toggleMask]="true" styleClass="mb-5" inputStyleClass="w-full p-3 md:w-30rem" [feedback]="false"></p-password>
-
-                    <div class="flex align-items-center justify-content-between mb-5 gap-5">
-                        <div class="flex align-items-center">
-                            <p-checkbox id="rememberme1" [binary]="true" styleClass="mr-2"></p-checkbox>
-                            <label for="rememberme1">Recordarme</label>
-                        </div>
-                        <a class="font-medium no-underline ml-2 text-right cursor-pointer" style="color: var(--primary-color)">¿Olvidaste tu contraseña?</a>
+                <form [formGroup]="loginForm" (ngSubmit)="funIngresar()" novalidate>
+                    <!-- Campo Cédula (mapeado a columna email en BD) -->
+                    <div class="mb-4">
+                        <label for="cedula" class="block text-900 text-xl font-medium mb-2">Cédula de Identidad</label>
+                        <input id="cedula" type="text" maxlength="10" placeholder="Ej: 1710034065" pInputText
+                            formControlName="cedula" class="w-full" style="padding:1rem"
+                            [ngClass]="{'ng-invalid ng-dirty': f.cedula.touched && f.cedula.invalid}" />
+                        @if (f.cedula.touched && f.cedula.errors) {
+                        @if (f.cedula.errors['required']) {
+                        <small class="p-error block mt-2">La cédula es obligatoria.</small>
+                        } @else if (f.cedula.errors['cedulaInvalida']) {
+                        <small class="p-error block mt-2">{{ f.cedula.errors['cedulaInvalida'].motivo }}</small>
+                        }
+                        }
                     </div>
-                    
-                    <!-- Botón de submit con bloqueo si el form es inválido o la cuenta está bloqueada -->
-                    <button pButton pRipple type="submit" label="Ingresar" class="w-full p-3 text-xl" [disabled]="!loginForm.valid || cuentaBloqueada"></button>
+
+                    <!-- Campo Contraseña -->
+                    <div class="mb-4">
+                        <label for="password_hash" class="block text-900 font-medium text-xl mb-2">Contraseña</label>
+                        <p-password id="password_hash" formControlName="password_hash"
+                            placeholder="Ingresa tu contraseña" [toggleMask]="true" [feedback]="false"
+                            styleClass="w-full" inputStyleClass="w-full p-3"
+                            [ngClass]="{'ng-invalid ng-dirty': f.password_hash.touched && f.password_hash.invalid}">
+                        </p-password>
+                        @if (f.password_hash.touched && f.password_hash.errors) {
+                        @if (f.password_hash.errors['required']) {
+                        <small class="p-error block mt-2">La contraseña es obligatoria.</small>
+                        } @else if (f.password_hash.errors['minlength']) {
+                        <small class="p-error block mt-2">La contraseña debe tener al menos 6 caracteres.</small>
+                        }
+                        }
+                    </div>
+
+                    <!-- Opciones: Recordarme y Recuperación de Contraseña -->
+                    <div class="flex align-items-center justify-content-between mb-5 gap-3 flex-wrap">
+                        <div class="flex align-items-center">
+                            <p-checkbox id="rememberme1" [binary]="true" [(ngModel)]="recordarme"
+                                [ngModelOptions]="{standalone: true}" styleClass="mr-2">
+                            </p-checkbox>
+                            <label for="rememberme1" class="text-900 cursor-pointer">Recordarme</label>
+                        </div>
+                        <a [routerLink]="['/auth/forgot-password']"
+                            class="font-medium no-underline text-right cursor-pointer"
+                            style="color: var(--primary-color)">
+                            ¿Olvidaste tu contraseña?
+                        </a>
+                    </div>
+
+                    <!-- Botón Ingresar -->
+                    <button pButton pRipple type="submit" label="Iniciar Sesión" icon="pi pi-sign-in"
+                        [loading]="cargando" [disabled]="loginForm.invalid || cargando" class="w-full p-3 text-xl mb-4">
+                    </button>
+
+                    <!-- Enlace a Registro -->
+                    <div class="text-center mt-3">
+                        <span class="text-600 font-medium">¿No tienes una cuenta? </span>
+                        <a [routerLink]="['/auth/register']" class="font-semibold no-underline cursor-pointer"
+                            style="color: var(--primary-color)">
+                            Regístrate aquí
+                        </a>
+                    </div>
                 </form>
-                <!-- Fin del Reactive Form -->
             </div>
         </div>
     </div>

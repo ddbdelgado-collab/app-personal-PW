@@ -1,1 +1,168 @@
-<p>register works!</p>
+<p-toast position="top-right"></p-toast>
+
+<div
+    class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden py-5 px-3">
+    <div class="flex flex-column align-items-center justify-content-center w-full" style="max-width: 44rem;">
+        <div class="w-full"
+            style="border-radius:56px; padding:0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%);">
+            <div class="w-full surface-card py-6 px-5 sm:px-7" style="border-radius:53px">
+                <div class="text-center mb-5">
+                    <!--<img src="assets/demo/images/login/avatar.png" alt="Avatar" height="50" class="mb-3">-->
+                    <div class="text-900 text-3xl font-medium mb-2">Crear una Cuenta</div>
+                    <span class="text-600 font-medium">Completa tus datos personales para registrarte</span>
+                </div>
+
+                <form [formGroup]="registerForm" (ngSubmit)="funRegistrar()" novalidate>
+                    <div class="grid formgrid p-fluid">
+                        <!-- Nombre -->
+                        <div class="field col-12 md:col-6 mb-3">
+                            <label for="nombre" class="block text-900 text-lg font-medium mb-2">Nombre</label>
+                            <input id="nombre" type="text" pInputText formControlName="nombre"
+                                placeholder="Ej: Juan Carlos" class="w-full p-3"
+                                [ngClass]="{'ng-invalid ng-dirty': f.nombre.touched && f.nombre.invalid}" />
+                            @if (f.nombre.touched && f.nombre.errors) {
+                            @if (f.nombre.errors['required']) {
+                            <small class="p-error block mt-1">El nombre es obligatorio.</small>
+                            } @else if (f.nombre.errors['soloLetras']) {
+                            <small class="p-error block mt-1">Solo se permiten letras y espacios.</small>
+                            }
+                            }
+                        </div>
+
+                        <!-- Apellido -->
+                        <div class="field col-12 md:col-6 mb-3">
+                            <label for="apellido" class="block text-900 text-lg font-medium mb-2">Apellido</label>
+                            <input id="apellido" type="text" pInputText formControlName="apellido"
+                                placeholder="Ej: Pérez Gómez" class="w-full p-3"
+                                [ngClass]="{'ng-invalid ng-dirty': f.apellido.touched && f.apellido.invalid}" />
+                            @if (f.apellido.touched && f.apellido.errors) {
+                            @if (f.apellido.errors['required']) {
+                            <small class="p-error block mt-1">El apellido es obligatorio.</small>
+                            } @else if (f.apellido.errors['soloLetras']) {
+                            <small class="p-error block mt-1">Solo se permiten letras y espacios.</small>
+                            }
+                            }
+                        </div>
+
+                        <!-- Cédula (Mapeado a columna 'email' en BD) -->
+                        <div class="field col-12 md:col-6 mb-3">
+                            <label for="cedula" class="block text-900 text-lg font-medium mb-2">Cédula de
+                                Identidad</label>
+                            <input id="cedula" type="text" maxlength="10" pInputText formControlName="cedula"
+                                placeholder="10 dígitos (Ej: 1710034065)" class="w-full p-3"
+                                [ngClass]="{'ng-invalid ng-dirty': f.cedula.touched && f.cedula.invalid}" />
+                            @if (f.cedula.touched && f.cedula.errors) {
+                            @if (f.cedula.errors['required']) {
+                            <small class="p-error block mt-1">La cédula es obligatoria.</small>
+                            } @else if (f.cedula.errors['cedulaInvalida']) {
+                            <small class="p-error block mt-1">{{ f.cedula.errors['cedulaInvalida'].motivo }}</small>
+                            }
+                            }
+                        </div>
+
+                        <!-- Teléfono -->
+                        <div class="field col-12 md:col-6 mb-3">
+                            <label for="telefono" class="block text-900 text-lg font-medium mb-2">Teléfono</label>
+                            <input id="telefono" type="text" maxlength="15" pInputText formControlName="telefono"
+                                placeholder="Solo números (Ej: 0991234567)" class="w-full p-3"
+                                [ngClass]="{'ng-invalid ng-dirty': f.telefono.touched && f.telefono.invalid}" />
+                            @if (f.telefono.touched && f.telefono.errors) {
+                            @if (f.telefono.errors['required']) {
+                            <small class="p-error block mt-1">El teléfono es obligatorio.</small>
+                            } @else if (f.telefono.errors['soloNumeros']) {
+                            <small class="p-error block mt-1">El teléfono solo debe contener números.</small>
+                            } @else if (f.telefono.errors['minlength']) {
+                            <small class="p-error block mt-1">Debe contener al menos 7 dígitos.</small>
+                            }
+                            }
+                        </div>
+
+                        <!-- Correo Electrónico (Mapeado a columna 'email1' en BD) -->
+                        <div class="field col-12 mb-3">
+                            <label for="correo" class="block text-900 text-lg font-medium mb-2">Correo
+                                Electrónico</label>
+                            <input id="correo" type="email" pInputText formControlName="correo"
+                                placeholder="usuario@dominio.com" class="w-full p-3"
+                                [ngClass]="{'ng-invalid ng-dirty': f.correo.touched && f.correo.invalid}" />
+                            @if (f.correo.touched && f.correo.errors) {
+                            @if (f.correo.errors['required']) {
+                            <small class="p-error block mt-1">El correo electrónico es obligatorio.</small>
+                            } @else if (f.correo.errors['emailEstricto']) {
+                            <small class="p-error block mt-1">Ingresa un correo válido con '&#64;' y dominio (ej: .com,
+                                .net, .ec).</small>
+                            }
+                            }
+                        </div>
+
+                        <!-- Contraseña -->
+                        <div class="field col-12 mb-4">
+                            <label for="password" class="block text-900 text-lg font-medium mb-2">Contraseña
+                                Segura</label>
+                            <p-password id="password" formControlName="password"
+                                placeholder="Crea una contraseña segura" [toggleMask]="true" [feedback]="false"
+                                styleClass="w-full" inputStyleClass="w-full p-3"
+                                [ngClass]="{'ng-invalid ng-dirty': f.password.touched && f.password.invalid}">
+                            </p-password>
+
+                            <!-- Indicadores de requisitos de seguridad de la contraseña -->
+                            <div class="surface-100 border-round p-3 mt-2 text-sm">
+                                <div class="font-medium text-700 mb-4">Requisitos de seguridad de la contraseña:</div>
+                                <div class="grid">
+                                    <div class="col-12 sm:col-6 py-1 flex align-items-center">
+                                        <i class="pi mr-2"
+                                            [ngClass]="tieneMayuscula ? 'pi-check-circle text-green-500' : 'pi-circle text-500'"></i>
+                                        <span [ngClass]="tieneMayuscula ? 'text-green-700 font-medium' : 'text-600'">Al
+                                            menos 1 letra mayúscula</span>
+                                    </div>
+                                    <div class="col-12 sm:col-6 py-1 flex align-items-center">
+                                        <i class="pi mr-2"
+                                            [ngClass]="tieneNumero ? 'pi-check-circle text-green-500' : 'pi-circle text-500'"></i>
+                                        <span [ngClass]="tieneNumero ? 'text-green-700 font-medium' : 'text-600'">Al
+                                            menos 1 número</span>
+                                    </div>
+                                    <div class="col-12 sm:col-6 py-1 flex align-items-center">
+                                        <i class="pi mr-2"
+                                            [ngClass]="tieneEspecial ? 'pi-check-circle text-green-500' : 'pi-circle text-500'"></i>
+                                        <span [ngClass]="tieneEspecial ? 'text-green-700 font-medium' : 'text-600'">Al
+                                            menos 1 carácter especial (signo)</span>
+                                    </div>
+                                    <div class="col-12 sm:col-6 py-1 flex align-items-center">
+                                        <i class="pi mr-2"
+                                            [ngClass]="tieneLongitudMinima ? 'pi-check-circle text-green-500' : 'pi-circle text-500'"></i>
+                                        <span
+                                            [ngClass]="tieneLongitudMinima ? 'text-green-700 font-medium' : 'text-600'">Mínimo
+                                            6 caracteres</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @if (f.password.touched && f.password.errors) {
+                            @if (f.password.errors['required']) {
+                            <small class="p-error block mt-2">La contraseña es obligatoria.</small>
+                            } @else {
+                            <small class="p-error block mt-2">La contraseña debe cumplir con todos los requisitos de
+                                seguridad indicados.</small>
+                            }
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Botón Registrarse -->
+                    <button pButton pRipple type="submit" label="Registrar Usuario" icon="pi pi-user-plus"
+                        [loading]="cargando" [disabled]="registerForm.invalid || cargando"
+                        class="w-full p-3 text-xl mb-4">
+                    </button>
+
+                    <!-- Enlace a Login -->
+                    <div class="text-center mt-2">
+                        <span class="text-600 font-medium">¿Ya tienes una cuenta? </span>
+                        <a [routerLink]="['/auth/login']" class="font-semibold no-underline cursor-pointer"
+                            style="color: var(--primary-color)">
+                            Inicia sesión aquí
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

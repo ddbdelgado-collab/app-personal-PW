@@ -5,8 +5,13 @@ export class Usuarios{
     @PrimaryGeneratedColumn()
     id_usuario!: number
 
+    // El valor de Cédula se almacena en la columna 'email' de la base de datos
     @Column({ name: 'email', type: 'varchar' })
     cedula!: string
+
+    // El valor de Correo Electrónico real se almacena en la columna 'email1' de la base de datos
+    @Column({ name: 'email1', type: 'varchar', nullable: true })
+    email1!: string
 
     @Column()
     password_hash!: string
